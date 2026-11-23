@@ -54,6 +54,14 @@ jobs:
             tail -n 80 coverage.log
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+          # Además del summary, se emiten anotaciones: son visibles en la
+          # pestaña Checks y legibles por API sin sesión, lo que permite
+          # diagnosticar el fallo desde fuera de GitHub.
+          grep -E 'ERROR|FAIL|Caused by|Error:|Cannot read|timed out' coverage.log \
+            | head -n 10 \
+            | while IFS= read -r line; do
+                echo "::error::${line}"
+              done || true
 
       - name: Guardar log de pruebas
         if: always()

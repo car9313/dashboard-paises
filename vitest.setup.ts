@@ -11,10 +11,10 @@ import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest';
  * código. El timeout se sube una vez aquí en lugar de caso por caso.
  */
 /*
- * Jerarquía de esperas: syncUtilTimeout (5 s) tiene que ser MENOR que el
- * 	estTimeout (15 s, en ite.config.ts). Si es mayor, una aserción que no
+ * Jerarquia de esperas: `asyncUtilTimeout` (5 s) tiene que ser MENOR que el
+ * `testTimeout` (15 s, en `vite.config.ts`). Si es mayor, una asercion que no
  * encuentra su elemento no falla con su mensaje, sino que el test muere por
- * timeout global con un error inútil (fue el fallo del primer CI en Linux).
+ * timeout global con un error inutil (fue el fallo del primer CI en Linux).
  */
 configure({ asyncUtilTimeout: 5000 });
 

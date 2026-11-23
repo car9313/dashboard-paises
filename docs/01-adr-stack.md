@@ -29,7 +29,7 @@ lógica (contratos, reglas, UX), no el código.
 **Consecuencias.**
 
 - ➕ Control total del código, stack actual, sin la restricción "Angular 21 fijado".
-- ➕ El nombre del repo (`dashboard-react`) coincide con la intención.
+- ➕ El nombre del repo (`dashboard-paises`) describe el producto, no la tecnología: no envejece si el stack cambia.
 - ➖ Se reescriben ~100 archivos; la red de seguridad de los 652 tests del origen no viaja.
 - ➖ El conocimiento del dominio hay que extraerlo a mano (mitigado por `docs/03-contratos-api.md`).
 

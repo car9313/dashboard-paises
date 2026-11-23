@@ -21,7 +21,7 @@
 ## 2. Árbol de carpetas
 
 ```
-dashboard-react/
+dashboard-paises/
 ├── docs/                          # este paquete de documentación
 ├── e2e/                           # Playwright: flujos críticos
 │   ├── auth.spec.ts

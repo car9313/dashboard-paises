@@ -72,6 +72,7 @@ Después, en GitHub: **Settings → Actions → General** (permitir workflows) y
 | [`docs/07-convenciones.md`](docs/07-convenciones.md)             | Naming, TSDoc, imports, commits, checklist de PR                                         |
 | [`docs/08-riesgos-y-deuda.md`](docs/08-riesgos-y-deuda.md)       | Riesgos, mitigaciones y deuda asumida conscientemente                                    |
 | [`docs/09-bitacora.md`](docs/09-bitacora.md)                     | Bitácora de construcción: decisiones sobre la marcha, incidentes y pendientes            |
+| [`docs/10-puesta-en-marcha.md`](docs/10-puesta-en-marcha.md)     | Paso a paso de remoto, Actions, protección de rama, Pages y flujo diario                 |
 | [`AGENTS.md`](AGENTS.md)                                         | Punto de entrada para agentes y personas: invariantes y protocolo                        |
 
 ---

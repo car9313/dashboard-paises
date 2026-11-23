@@ -11,7 +11,9 @@ concurrency:
 
 jobs:
   quality:
-    name: Calidad (types · lint · cobertura · build · presupuesto)
+    # Nombre corto y estable: es el que se exige como required check en la
+    # protección de rama. Si se renombra, hay que actualizar esa configuración.
+    name: quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +55,8 @@ jobs:
           retention-days: 7
 
   e2e:
-    name: E2E (Chromium, modo mock)
+    # Mismo criterio que quality: el nombre es parte del contrato con GitHub.
+    name: e2e
     runs-on: ubuntu-latest
     needs: quality
     steps:

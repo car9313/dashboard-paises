@@ -56,18 +56,21 @@ municipios, ni auditoría.
 pnpm dev          # http://localhost:5173  (el backend solo permite CORS desde este origen)
 pnpm typecheck    # tsc --noEmit
 pnpm lint         # ESLint flat
-pnpm test         # Vitest
+pnpm test         # Vitest (ciclo corto, sin cobertura)
+pnpm test:coverage # Vitest + umbrales (lo que exige el gate)
 pnpm build        # build de producción
 pnpm e2e          # Playwright (navegador real, modo mock)
 pnpm size         # presupuesto de arranque en gzip (requiere build)
-pnpm verify       # gate completo: types + lint + test + build + size
+pnpm verify       # gate completo: types + lint + cobertura + build + size
 pnpm api:types    # regenera tipos desde Swagger
 ```
+
+Puesta en marcha del repo, CI/CD y protección de rama: [docs/10-puesta-en-marcha.md](docs/10-puesta-en-marcha.md).
 
 Gate obligatorio antes de declarar algo terminado:
 
 ```bash
-pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm size
+pnpm typecheck && pnpm lint && pnpm test:coverage && pnpm build && pnpm size
 # o, de una vez:
 pnpm verify
 ```

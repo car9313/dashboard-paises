@@ -140,3 +140,31 @@ ejecutado y todo el trabajo vivía en un solo disco. Se hizo:
 
 Pendiente de decisión: el destino real del panel. La demo de Pages usa datos simulados porque el backend
 solo permite CORS desde `localhost:5173` (R6) y no hay usuario de prueba (R5).
+---
+
+## 12. El primer CI falló por la versión de Node (2026-11-23)
+
+Primer push, primer fallo: el job `quality` murió en «Pruebas y cobertura» con **cobertura al 0 %** y 35
+errores. La cobertura era el cadáver; el arma estaba enterrada arriba:
+
+```
+Error: [vitest-pool]: Failed to start forks worker
+Caused by: TypeError: Cannot read properties of undefined (reading 'bind')
+  ❯ undici@8.12.4/lib/interceptor/decompress.js:78
+```
+
+`undici` (que entra por `jsdom@31`) usa `zlib.createZstdDecompress`, y esa función **no existe en Node
+22.12**. El worker ni arrancaba, así que Vitest informaba 0 tests y la cobertura 0 %. Los umbrales
+funcionaron perfectamente: señalaron la catástrofe real.
+
+Por qué no se reproducía en local: `jsdom@31` exige `^22.22.2 || ^24.15.0 || >=26.0.0` y la máquina tiene
+Node 26. El CI usaba `22.12.0` —heredado de un `engines: ">=22.12.0"` escrito a mano cuando el stack era
+otro—. **El `engines` del proyecto prometía algo que las dependencias no cumplían.**
+
+Arreglo: CI y despliegue con **Node 24** (LTS, cumple todos los `engines`), `.nvmrc` en `24`, `engines`
+corregido a `>=22.22.2` —el mínimo real de jsdom— y `.npmrc` con la nota de por qué no se activa
+`engine-strict` (pnpm lo aplica también a dependencias transitivas y rompería la instalación por un rango
+antiguo).
+
+Lección: cuando el fallo aparece en la primera ejecución del CI y no en local, la diferencia es **el
+entorno**, y el mensaje real casi nunca está en el último error de la lista sino en el primer `Caused by`.

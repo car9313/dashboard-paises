@@ -168,3 +168,26 @@ antiguo).
 
 Lección: cuando el fallo aparece en la primera ejecución del CI y no en local, la diferencia es **el
 entorno**, y el mensaje real casi nunca está en el último error de la lista sino en el primer `Caused by`.
+
+### 12.1 La segunda capa del mismo fallo: un test esperaba un estado transitorio
+
+Con Node 24 el `undici` ya cargaba, y el CI siguió fallando. Esta vez las anotaciones del check
+(`::error::` emitido por el workflow) dieron el mensaje exacto:
+
+```
+TestTimeoutError: Test timed out in 5000ms
+src/features/countries/api/mutations.spec.tsx > useToggleCountry > expone la fila en vuelo
+```
+
+Dos errores encadenados, ambos míos:
+
+1. **`asyncUtilTimeout: 8000` > `testTimeout: 5000`.** La espera de Testing Library era más larga que la
+   vida del test: cuando algo no aparecía, el test moría por timeout global en vez de fallar con la
+   aserción real. Ahora la jerarquía es explícita: `asyncUtilTimeout` 5 s, `testTimeout`/`hookTimeout` 15 s.
+2. **El test esperaba `isPending` con un handler de 30 ms.** `isPending` es un estado transitorio: en una
+   máquina rápida `waitFor` lo pilla; en un runner lento la mutación resuelve entre dos comprobaciones y el
+   `waitFor` espera un estado que ya pasó. El retardo del handler subió a 250 ms, que hace el estado
+   observable de forma fiable.
+
+Lección: los timeouts de la herramienta deben ser coherentes entre sí, y un test nunca debe observar un
+estado transitorio con una ventana más corta que su propia espera.

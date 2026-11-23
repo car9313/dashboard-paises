@@ -10,7 +10,13 @@ import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest';
  * `waitFor`, 5 s en `findBy`) provocaban fallos intermitentes que no eran del
  * código. El timeout se sube una vez aquí en lugar de caso por caso.
  */
-configure({ asyncUtilTimeout: 8000 });
+/*
+ * Jerarquía de esperas: syncUtilTimeout (5 s) tiene que ser MENOR que el
+ * 	estTimeout (15 s, en ite.config.ts). Si es mayor, una aserción que no
+ * encuentra su elemento no falla con su mensaje, sino que el test muere por
+ * timeout global con un error inútil (fue el fallo del primer CI en Linux).
+ */
+configure({ asyncUtilTimeout: 5000 });
 
 import { resetDeviceKey } from '@/core/auth/device-key';
 import { resetSessionBootstrap } from '@/core/auth/session.service';

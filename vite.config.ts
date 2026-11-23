@@ -44,6 +44,10 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
     css: false,
+    // Holgura para runners lentos (CI: 2-4 vCPU compartidas). Debe superar
+    // syncUtilTimeout (5 s) para que las aserciones fallen por su motivo.
+    testTimeout: 15000,
+    hookTimeout: 15000,
     restoreMocks: true,
     // Las pruebas de navegador las corre Playwright (`pnpm e2e`), no Vitest.
     exclude: [...configDefaults.exclude, 'e2e/**'],

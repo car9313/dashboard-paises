@@ -101,7 +101,10 @@ describe('useToggleCountry', () => {
   it('expone la fila en vuelo mediante las variables', async () => {
     server.use(
       http.delete(`${API}/api/country/:code`, async () => {
-        await new Promise((resolve) => setTimeout(resolve, 30));
+        // 250 ms, no 30: el test observa isPending, un estado transitorio.
+        // Con 30 ms la mutación podía resolverse antes de que el observer lo
+        // viera y waitFor esperaba un estado que ya había pasado.
+        await new Promise((resolve) => setTimeout(resolve, 250));
         return new HttpResponse(null, { status: 200 });
       })
     );

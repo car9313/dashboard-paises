@@ -191,3 +191,25 @@ Dos errores encadenados, ambos míos:
 
 Lección: los timeouts de la herramienta deben ser coherentes entre sí, y un test nunca debe observar un
 estado transitorio con una ventana más corta que su propia espera.
+
+### 12.2 Cierre: el CI está en verde (2026-11-23)
+
+Tres fallos encadenados en el primer día del pipeline, todos del mismo estilo —un síntoma que esconde la
+causa— y todos arreglados con evidencia del run, no a ciegas:
+
+| #   | Síntoma                                | Causa real                                                                                                    | Arreglo                                                                |
+| --- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| 1   | Cobertura al 0 % y 35 errores          | `undici` no cargaba: `zlib.createZstdDecompress` no existe en Node 22.12                                      | CI con Node 24, `engines` a `>=22.22.2` (mínimo de jsdom)              |
+| 2   | `TestTimeoutError` en `mutations.spec` | `asyncUtilTimeout` (8 s) mayor que `testTimeout` (5 s) + espera de un estado transitorio con handler de 30 ms | `asyncUtilTimeout` 5 s, `testTimeout` 15 s, handler a 250 ms           |
+| 3   | `Irregular whitespace not allowed`     | Backticks dentro de una cadena de PowerShell: `` `a `` → campana, `` `t `` → tabulador                        | Comentarios reescritos con la herramienta de edición, no con `Replace` |
+
+Dos decisiones de proceso que ya están pagando:
+
+- **`::error::` en el workflow.** Las anotaciones del check son legibles por API pública, así que un fallo
+  se puede diagnosticar desde fuera de GitHub sin abrir logs ni pedir capturas.
+- **`tee coverage.log` + `$GITHUB_STEP_SUMMARY`.** El fallo se resume en el propio job.
+
+Resultado: `quality` y `e2e` en verde sobre `a276481`, con 251 pruebas, umbral de cobertura aplicado y
+presupuesto de bundle dentro del límite.
+
+Pendiente: protección de rama en GitHub (`docs/10` §3) y su prueba de bloqueo (§5).

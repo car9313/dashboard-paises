@@ -37,8 +37,31 @@ jobs:
 
       # `test:coverage` aplica los umbrales de `vite.config.ts`: si la cobertura
       # baja, el job falla. No se usa `pnpm test` aquí a propósito.
+      # `tee` guarda la salida completa: si falla, se resume en el summary del
+      # job y se adjunta como artefacto, en lugar de obligar a bucear en el log.
       - name: Pruebas y cobertura
-        run: pnpm test:coverage
+        run: |
+          set -o pipefail
+          pnpm test:coverage 2>&1 | tee coverage.log
+
+      - name: Resumen del fallo de pruebas
+        if: failure()
+        run: |
+          {
+            echo '### Falló «Pruebas y cobertura»'
+            echo ''
+            echo '```'
+            tail -n 80 coverage.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Guardar log de pruebas
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-output
+          path: coverage.log
+          retention-days: 7
 
       - name: Build
         run: pnpm build

@@ -121,3 +121,22 @@ y el CSS cede ante la preferencia explícita con `html:not([data-motion='always'
 
 De paso se cambió la animación del sidebar para no animar `max-width` (recálculo de layout por frame) y
 centrar el icono con `padding-left` en lugar de `justify-content`.
+---
+
+## 11. Repositorio, CI y CD (2026-11-23)
+
+Hasta hoy el proyecto **no estaba bajo control de versiones**: existía un `ci.yml` que nunca se había
+ejecutado y todo el trabajo vivía en un solo disco. Se hizo:
+
+- `git init` en `main`, `.gitattributes` con `* text=auto eol=lf` (sin él, `core.autocrlf` de Windows genera
+  diffs de líneas completas en cada checkout) y primer commit de 214 archivos, 1,5 MB de historia,
+  sin `node_modules`, `dist`, `coverage` ni `.env`.
+- **Cobertura obligatoria**: `verify` y el CI usan `test:coverage`; umbrales en `vite.config.ts` (global
+  75/67/70/76 y por capa, ver `docs/06` §1.1). Se verificó que un umbral imposible rompe el comando.
+- **CI** (`ci.yml`) con caché de navegadores de Playwright, artefacto de cobertura y `VITE_API_MODE=mock`
+  explícito.
+- **CD** (`deploy.yml`) que publica una demo estática en Pages, solo a mano o con etiqueta `v*`.
+  `vite.config.ts` acepta `VITE_BASE` para servir bajo `/<repo>/`.
+
+Pendiente de decisión: el destino real del panel. La demo de Pages usa datos simulados porque el backend
+solo permite CORS desde `localhost:5173` (R6) y no hay usuario de prueba (R5).

@@ -18,6 +18,28 @@ toque flujos críticos.
 
 ---
 
+### 1.1 Cobertura obligatoria (2026-11-23)
+
+`pnpm verify` ejecuta `test:coverage`, no `test`: el gate local y el CI miden lo mismo. Los umbrales viven
+en `vite.config.ts` y se fijaron con la cobertura real medida el 2026-11-23 (78,0 % de sentencias) menos dos
+o tres puntos:
+
+| Ámbito            | Sentencias | Ramas | Funciones | Líneas |
+| ----------------- | ---------- | ----- | --------- | ------ |
+| Global            | 75         | 67    | 70        | 76     |
+| `src/core/**`     | 81         | 73    | 70        | 82     |
+| `src/features/**` | 81         | 67    | 78        | 82     |
+| `src/shared/**`   | 92         | 90    | 90        | 92     |
+
+`src/test-utils/**` queda fuera del cómputo: mide el andamio, no el producto. Los globs por capa son la
+parte útil —`shared` y `core` son el suelo del resto—, y se comprobó que **bloquean de verdad**: subir
+`shared` al 99 % hace fallar el comando con `ERROR: Coverage for statements (94.2%) does not meet`.
+
+`pnpm test` sigue existiendo para el ciclo corto (sin cobertura) y `pnpm test:coverage` es el que se usa en
+el gate y en CI, con informe `html`, `lcov` y `json-summary` en `coverage/` (subido como artefacto).
+
+---
+
 ## 2. Pirámide y qué se prueba en cada nivel
 
 | Nivel                                  | Volumen esperado | Qué cubre                                                                   | Ejemplo                                     |

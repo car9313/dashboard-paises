@@ -29,6 +29,35 @@ Detalle, criterios de aceptación y gates por fase: [`docs/05-plan-fases.md`](do
 
 ---
 
+## Integración y entrega continua
+
+El repositorio usa **GitHub Actions** con dos flujos:
+
+| Flujo                          | Cuándo                  | Qué hace                                                                                                           |
+| ------------------------------ | ----------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `.github/workflows/ci.yml`     | push a `main` y cada PR | Tipos · lint · **pruebas con umbral de cobertura** · build · presupuesto de bundle, y después los E2E con Chromium |
+| `.github/workflows/deploy.yml` | manual o etiqueta `v*`  | Publica una **demo estática** en GitHub Pages en modo `mock`                                                       |
+
+La cobertura **bloquea** el CI: si baja de los umbrales de `vite.config.ts` (75 % global; 81 % en `core` y
+`features`; 92 % en `shared`), el job falla. Los umbrales se fijaron con la cobertura real medida el
+2026-11-23 menos dos o tres puntos de margen.
+
+Primera puesta en marcha (una sola vez):
+
+```bash
+git remote add origin git@github.com:<usuario>/<repo>.git
+git push -u origin main
+```
+
+Después, en GitHub: **Settings → Actions → General** (permitir workflows) y, para la demo,
+**Settings → Pages → Source: GitHub Actions**. El despliegue no se dispara solo: se lanza desde
+**Actions → Deploy → Run workflow**.
+
+> La demo pública funciona con datos simulados (MSW). Un despliegue contra el backend real necesita CORS
+> desde el origen de Pages y un usuario de prueba (riesgos R5 y R6 en [`docs/08`](docs/08-riesgos-y-deuda.md)).
+
+---
+
 ## Documentación
 
 | Documento                                                        | Qué contiene                                                                             |

@@ -1,0 +1,188 @@
+{
+  "permissions": [
+    {
+      "category": "Nomencladores",
+      "permissions": [
+        {
+          "resource": "Nomenclators",
+          "description": "Nomenclador de países",
+          "actions": ["Leer", "Crear", "Actualizar", "Eliminar"]
+        }
+      ]
+    },
+    {
+      "category": "Seguridad",
+      "permissions": [
+        {
+          "resource": "User",
+          "description": "Usuarios del sistema",
+          "actions": ["Leer", "Crear", "Actualizar", "Eliminar"]
+        },
+        {
+          "resource": "Role",
+          "description": "Roles y permisos",
+          "actions": ["Leer", "Crear", "Actualizar", "Eliminar"]
+        }
+      ]
+    },
+    {
+      "category": "Auditoría",
+      "permissions": [
+        {
+          "resource": "Audit",
+          "description": "Registro de auditoría",
+          "actions": ["Leer"]
+        }
+      ]
+    }
+  ],
+  "roles": [
+    {
+      "id": 1,
+      "name": "Administrador",
+      "isUnEditable": true,
+      "isUnDeletable": true,
+      "permissions": [
+        {
+          "resource": "Nomenclators",
+          "description": "Nomenclador de países",
+          "actions": ["Leer", "Crear", "Actualizar", "Eliminar"]
+        },
+        {
+          "resource": "User",
+          "description": "Usuarios del sistema",
+          "actions": ["Leer", "Crear", "Actualizar", "Eliminar"]
+        },
+        {
+          "resource": "Role",
+          "description": "Roles y permisos",
+          "actions": ["Leer", "Crear", "Actualizar", "Eliminar"]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Consulta",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "permissions": [
+        {
+          "resource": "Nomenclators",
+          "description": "Nomenclador de países",
+          "actions": ["Leer"]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Auditoría",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "permissions": [
+        {
+          "resource": "Audit",
+          "description": "Registro de auditoría",
+          "actions": ["Leer"]
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "fullName": "Ana Administradora",
+      "isUnEditable": true,
+      "isUnDeletable": true,
+      "roles": [{ "id": 1, "name": "Administrador" }]
+    },
+    {
+      "id": 2,
+      "username": "consulta",
+      "fullName": "Carlos Consulta",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 2, "name": "Consulta" }]
+    },
+    {
+      "id": 3,
+      "username": "sinautorizacion",
+      "fullName": "Sonia Sin Acceso",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 3, "name": "Auditoría" }]
+    },
+    {
+      "id": 4,
+      "username": "mgonzalez",
+      "fullName": "Marta González",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 2, "name": "Consulta" }]
+    },
+    {
+      "id": 5,
+      "username": "jperez",
+      "fullName": "Jorge Pérez",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 2, "name": "Consulta" }]
+    },
+    {
+      "id": 6,
+      "username": "lrodriguez",
+      "fullName": "Luisa Rodríguez",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 2, "name": "Consulta" }]
+    },
+    {
+      "id": 7,
+      "username": "rsanchez",
+      "fullName": "Ramón Sánchez",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 2, "name": "Consulta" }]
+    },
+    {
+      "id": 8,
+      "username": "dfernandez",
+      "fullName": "Dalia Fernández",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 3, "name": "Auditoría" }]
+    },
+    {
+      "id": 9,
+      "username": "acastro",
+      "fullName": "Andrés Castro",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 2, "name": "Consulta" }]
+    },
+    {
+      "id": 10,
+      "username": "ymartinez",
+      "fullName": "Yusmila Martínez",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 1, "name": "Administrador" }]
+    },
+    {
+      "id": 11,
+      "username": "eherrera",
+      "fullName": "Ernesto Herrera",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 2, "name": "Consulta" }]
+    },
+    {
+      "id": 12,
+      "username": "bnunez",
+      "fullName": "Beatriz Núñez",
+      "isUnEditable": false,
+      "isUnDeletable": false,
+      "roles": [{ "id": 2, "name": "Consulta" }]
+    }
+  ]
+}

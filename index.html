@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es-CU">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#059669" />
+    <title>Dashboard · Países</title>
+
+    <!--
+      Fija el tema ANTES del primer paint para evitar el destello claro→oscuro.
+      Debe coincidir con la clave y el shape que persiste `useThemeStore`
+      (Zustand persist: { state: { mode }, version }).
+    -->
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('dashboard-theme');
+          var mode = raw ? JSON.parse(raw).state.mode : 'system';
+          var dark =
+            mode === 'dark' ||
+            (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+        } catch (error) {
+          /* almacenamiento no disponible: se queda el tema claro */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

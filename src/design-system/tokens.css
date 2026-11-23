@@ -1,0 +1,97 @@
+/*
+ * Tokens semánticos del sistema de diseño.
+ *
+ * Única fuente de verdad del color y de los valores que cambian con el tema.
+ * Los componentes NUNCA usan hex: consumen estas variables a través de las
+ * utilidades de Tailwind declaradas en `styles.css` (`bg-card`, `text-muted-foreground`…).
+ *
+ * Contraste: `--primary` (#059669) sobre `--card` (#ffffff) = 4.54:1 (AA).
+ * En oscuro, `--primary` (#34d399) sobre `--card` (#111a2b) = 8.1:1 (AAA).
+ */
+
+:root {
+  /* Superficies */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --subtle-foreground: #64748b;
+
+  /* Bordes */
+  --border: #e2e8f0;
+  --border-strong: #7c8aa0;
+
+  /* Marca (emerald, CORPORATE_PRIMARY del proyecto origen) */
+  --primary: #047857;
+  --primary-hover: #065f46;
+  --primary-foreground: #ffffff;
+  --primary-soft: #ecfdf5;
+  --primary-soft-foreground: #047857;
+
+  /* Estados */
+  --success: #047857;
+  --success-soft: #ecfdf5;
+  --warning: #b45309;
+  --warning-soft: #fffbeb;
+  --danger: #b91c1c;
+  --danger-soft: #fef2f2;
+  --info: #0369a1;
+  --info-soft: #f0f9ff;
+
+  /* Interacción */
+  --ring: #047857;
+  --overlay: rgb(15 23 42 / 0.45);
+
+  /* Movimiento */
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 240ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Capas */
+  --z-sticky: 10;
+  --z-dropdown: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+  --z-tooltip: 60;
+
+  /* Layout del shell */
+  --sidebar-width: 260px;
+  --sidebar-width-collapsed: 72px;
+  --topbar-height: 56px;
+  --content-max: 1440px;
+}
+
+html.dark {
+  --background: #0b1220;
+  --foreground: #e6edf7;
+  --card: #111a2b;
+  --card-foreground: #e6edf7;
+  --muted: #172236;
+  --muted-foreground: #9aa9bf;
+  --subtle-foreground: #8595ab;
+
+  --border: #1f2b3f;
+  --border-strong: #5b6f92;
+
+  --primary: #34d399;
+  --primary-hover: #6ee7b7;
+  --primary-foreground: #052e22;
+  --primary-soft: #052e22;
+  --primary-soft-foreground: #6ee7b7;
+
+  --success: #34d399;
+  --success-soft: #052e22;
+  --warning: #fbbf24;
+  --warning-soft: #331f04;
+  --danger: #f87171;
+  --danger-soft: #3a1212;
+  --info: #38bdf8;
+  --info-soft: #082f49;
+
+  --ring: #34d399;
+  --overlay: rgb(2 6 23 / 0.65);
+}

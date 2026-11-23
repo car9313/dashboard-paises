@@ -1,0 +1,14 @@
+# Normaliza finales de línea en el repositorio (LF) y en el working copy.
+#
+# Sin esto, `core.autocrlf=true` de Windows guarda unos archivos con CRLF y otros
+# con LF, y cada checkout genera diffs de líneas completas que no existen.
+* text=auto eol=lf
+
+# Binarios: git no debe intentar normalizarlos.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

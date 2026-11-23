@@ -1,0 +1,186 @@
+@import 'tailwindcss';
+@import './design-system/tokens.css';
+
+/*
+ * Puente entre los tokens semánticos y las utilidades de Tailwind.
+ *
+ * `inline` es obligatorio: hace que las utilidades emitan `var(--token)` en el
+ * punto de uso, de modo que el tema oscuro (`html.dark`) se aplique sin duplicar
+ * la declaración de cada clase.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-foreground: var(--primary-soft-foreground);
+
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+
+  --color-ring: var(--ring);
+  --color-overlay: var(--overlay);
+}
+
+/* Escala corporativa de radios (2/4/4/6/8), heredada del origen. */
+@theme {
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+
+  --font-sans: 'Inter var', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
+
+  --shadow-xs: 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-sm: 0 1px 3px rgb(15 23 42 / 0.1), 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-md: 0 8px 24px rgb(15 23 42 / 0.12);
+
+  /* Breakpoints del origen: 576 / 768 / 992 / 1200 / 1920 */
+  --breakpoint-sm: 36rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 62rem;
+  --breakpoint-xl: 75rem;
+  --breakpoint-2xl: 120rem;
+
+  --animate-fade-in: fade-in var(--duration-base) var(--ease-standard);
+  --animate-slide-up: slide-up var(--duration-base) var(--ease-standard);
+  --animate-page-in: page-in var(--duration-base) var(--ease-standard);
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer base {
+  /*
+   * Tailwind 4 cambió el color de borde por defecto a `currentColor`; se
+   * restaura el comportamiento de borde neutro para no depender de clases
+   * explícitas en cada elemento.
+   */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans text-sm antialiased;
+    margin: 0;
+    min-height: 100dvh;
+  }
+
+  /* Foco visible siempre: es requisito de accesibilidad, no decoración. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--primary-soft);
+    color: var(--primary-soft-foreground);
+  }
+}
+
+/*
+ * Cambio de tema animado.
+ *
+ * La clase la pone `applyTheme()` solo durante el cambio y se quita al terminar:
+ * animar colores de forma permanente en todo el árbol cuesta y no aporta nada
+ * cuando el usuario solo está navegando.
+ *
+ * `prefers-reduced-motion` (bloque siguiente) ya fuerza `transition-duration` a
+ * casi cero, así que aquí no hace falta repetir la condición.
+ */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition-property: background-color, border-color, color, fill, stroke, outline-color;
+  transition-duration: var(--duration-slow);
+  transition-timing-function: var(--ease-standard);
+}
+
+/*
+ * Preferencia de movimiento.
+ *
+ * Tres fuentes, en este orden de prioridad:
+ * 1. `data-motion="never"` → sin animaciones, aunque el sistema las permita.
+ * 2. `data-motion="always"` → animaciones, aunque el sistema pida reducirlas
+ *    (la media query deja de aplicar gracias al `:not`).
+ * 3. `data-motion="system"` (por defecto) → manda `prefers-reduced-motion`.
+ *
+ * Motivo: en Windows, «Efectos de animación» del sistema alimenta
+ * `prefers-reduced-motion`; mucha gente la tiene apagada sin saber que también
+ * desactiva las transiciones de las webs. El interruptor está en la barra
+ * superior (`MotionToggle`).
+ */
+html[data-motion='never'] *,
+html[data-motion='never'] *::before,
+html[data-motion='never'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion='always']) *,
+  html:not([data-motion='always']) *::before,
+  html:not([data-motion='always']) *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

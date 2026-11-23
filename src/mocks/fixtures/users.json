@@ -1,0 +1,70 @@
+[
+  {
+    "username": "admin",
+    "password": "Admin123$",
+    "user": {
+      "id": 1,
+      "username": "admin",
+      "fullName": "Ana Administradora",
+      "roles": [
+        {
+          "name": "Administrador",
+          "permissions": [
+            {
+              "resource": "Nomenclators",
+              "actions": ["Leer", "Crear", "Actualizar", "Eliminar"]
+            },
+            {
+              "resource": "User",
+              "actions": ["Leer", "Crear", "Actualizar", "Eliminar"]
+            },
+            {
+              "resource": "Role",
+              "actions": ["Leer", "Crear", "Actualizar", "Eliminar"]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "username": "consulta",
+    "password": "Consulta123$",
+    "user": {
+      "id": 2,
+      "username": "consulta",
+      "fullName": "Carlos Consulta",
+      "roles": [
+        {
+          "name": "Consulta",
+          "permissions": [
+            {
+              "resource": "Nomenclators",
+              "actions": ["Leer"]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "username": "sinautorizacion",
+    "password": "SinAcceso123$",
+    "user": {
+      "id": 3,
+      "username": "sinautorizacion",
+      "fullName": "Sonia Sin Acceso",
+      "roles": [
+        {
+          "name": "Auditoría",
+          "permissions": [
+            {
+              "resource": "Audit",
+              "actions": ["Leer"]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

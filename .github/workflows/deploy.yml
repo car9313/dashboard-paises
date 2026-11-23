@@ -1,0 +1,69 @@
+name: Deploy
+
+# Publica una **demo estática** en GitHub Pages.
+#
+# Solo se ejecuta a mano (`workflow_dispatch`) o al publicar una etiqueta: no
+# despliega en cada push, porque el destino real del panel (red corporativa, IIS,
+# otro hosting) todavía no está decidido.
+#
+# La demo funciona en modo `mock` (MSW con fixtures reales). Para apuntar al
+# backend de verdad hacen falta dos cosas que no dependen de este workflow:
+# 1. Que el backend permita CORS desde el origen de Pages (hoy solo
+#    `localhost:5173`, ver `docs/08` R6).
+# 2. Un usuario de prueba para el login (R5).
+#
+# `VITE_BASE` es necesario en Pages porque sirve bajo `/<repositorio>/`.
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build de la demo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.18.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+        env:
+          VITE_API_MODE: mock
+          VITE_BASE: /${{ github.event.repository.name }}/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Publicar
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
